@@ -14,14 +14,14 @@ const [addTask] = useMutation(ADD_TASK, {
         });
     },
     });
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('untitled');
   const [points, setPoints] = useState(0);
   const [priority, setPriority] = useState('LOW');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await addTask({ variables: { title, points, priority } });
-    setTitle('');
+    setTitle('untitled');
     setPoints(0);
     setPriority('LOW');
     console.log(event);
