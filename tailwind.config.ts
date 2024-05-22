@@ -15,6 +15,12 @@ const config: Config = {
       },
     },
   },
+  variants: {
+    extend: {
+      placeholderColor: ['active', 'focus'], // Add this line
+    },
+  },
   plugins: [],
 };
 export default config;
+

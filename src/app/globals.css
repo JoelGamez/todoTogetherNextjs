@@ -5,16 +5,16 @@
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  /* --background-end-rgb: 855, 255, 255; */
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
-}
+} */
 
 body {
   color: rgb(var(--foreground-rgb));
@@ -30,4 +30,32 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Define a utility for setting the placeholder color */
+  .placeholder-red-600::placeholder {
+    @apply text-red-600;
+  }
+  .placeholder-red-600::-webkit-input-placeholder { /* Chrome/Edge/Safari */
+    @apply text-red-600;
+  }
+  .placeholder-red-600::-moz-placeholder { /* Firefox 19+ */
+    @apply text-red-600;
+  }
+  .placeholder-red-600:-ms-input-placeholder { /* IE 10+ */
+    @apply text-red-600;
+  }
+  .placeholder-red-600::-ms-input-placeholder { /* Microsoft Edge */
+    @apply text-red-600;
+  }
+
+  /* Specific rule for number inputs */
+  input[type="number"].placeholder-red-600::-webkit-inner-spin-button,
+  input[type="number"].placeholder-red-600::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"].placeholder-red-600 {
+    -moz-appearance: textfield;
+  }
 }
+
