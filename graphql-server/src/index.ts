@@ -1,13 +1,14 @@
 // src/index.ts
-import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { v4 as uuidv4 } from 'uuid';
-import express from 'express';
-import http from 'http';
-import cors from 'cors';
-import bodyParser from 'body-parser';
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { v4 as uuidv4 } from "uuid";
+import Task from "../../src/models/task";
+import express from "express";
+import http from "http";
+import cors from "cors";
+import bodyParser from "body-parser";
 
 // Define the schema
 const typeDefs = `
@@ -38,37 +39,90 @@ const typeDefs = `
 `;
 
 // Define the resolvers
-const tasks = [
-  { id: '1', title: 'Task 1', points: 10, completed: false, priority: 'LOW' },
-  { id: '2', title: 'Task 2', points: 20, completed: false, priority: 'MEDIUM' },
-];
+// const tasks = [
+//   { id: "1", title: "Task 1", points: 10, completed: false, priority: "LOW" },
+//   {
+//     id: "2",
+//     title: "Task 2",
+//     points: 20,
+//     completed: false,
+//     priority: "MEDIUM",
+//   },
+// ];
 
 const resolvers = {
   Query: {
-    tasks: () => tasks,
+    tasks: async () => {
+      try {
+        return await Task.findAll({
+          order: [["createdAt", "ASC"]],
+        });
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        throw new Error("Error fetching tasks");
+      }
+    },
   },
   Mutation: {
-    addTask: (_: any, { title, points, priority }: { title: string, points: number, priority: string }) => {
-      const newTask = { id: uuidv4(), title, points, completed: false, priority };
-      tasks.push(newTask);
-      return newTask;
+    addTask: async (
+      _: any,
+      {
+        title,
+        points,
+        priority,
+      }: { title: string; points: number; priority: "LOW" | "MEDIUM" | "HIGH" }
+    ) => {
+      try {
+        return await Task.create({ title, points, priority, completed: false });
+      } catch (error) {
+        console.error("Error adding task:", error);
+        throw new Error("Error adding task");
+      }
     },
-    updateTask: (_: any, { id, title, points, completed }: { id: string, title?: string, points?: number, completed?: boolean }) => {
-      const task = tasks.find(task => task.id === id);
-      if (task) {
+    updateTask: async (
+      _: any,
+      {
+        id,
+        title,
+        points,
+        completed,
+        priority,
+      }: {
+        id: string;
+        title?: string;
+        points?: number;
+        completed?: boolean;
+        priority?: "LOW" | "MEDIUM" | "HIGH";
+      }
+    ) => {
+      try {
+        const task = await Task.findByPk(id);
+        if (!task) {
+          throw new Error("Task not found");
+        }
         if (title !== undefined) task.title = title;
         if (points !== undefined) task.points = points;
         if (completed !== undefined) task.completed = completed;
+        if (priority !== undefined) task.priority = priority;
+        await task.save();
+        return task;
+      } catch (error) {
+        console.error("Error updating task:", error);
+        throw new Error("Error updating task");
       }
-      return task;
     },
-    deleteTask: (_: any, { id }: { id: string }) => {
-      const index = tasks.findIndex(task => task.id === id);
-      if (index !== -1) {
-        const [deletedTask] = tasks.splice(index, 1);
-        return deletedTask; // return the deleted task instead of true
+    deleteTask: async (_: any, { id }: { id: string }) => {
+      try {
+        const task = await Task.findByPk(id);
+        if (!task) {
+          throw new Error("Task not found");
+        }
+        await task.destroy();
+        return task;
+      } catch (error) {
+        console.error("Error deleting task:", error);
+        throw new Error("Error deleting task");
       }
-      return null;
     },
   },
 };
@@ -88,13 +142,10 @@ const server = new ApolloServer({
 
 (async () => {
   await server.start();
-  app.use(
-    '/graphql',
-    cors(),
-    bodyParser.json(),
-    expressMiddleware(server),
-  );
+  app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server));
 
-  await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
+  await new Promise<void>((resolve) =>
+    httpServer.listen({ port: 4000 }, resolve)
+  );
   console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 })();
