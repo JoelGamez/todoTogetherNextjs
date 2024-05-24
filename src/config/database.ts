@@ -10,11 +10,16 @@ console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_PORT:", process.env.DB_PORT);
 
 // Create a new instance of Sequelize
-const sequelize = new Sequelize("todo_together", "joelgamez", "", {
-  host: process.env.DB_HOST!,
-  port: Number(process.env.DB_PORT!),
-  dialect: "postgres",
-});
+const sequelize = new Sequelize(
+  process.env.DB_NAME!,
+  process.env.DB_USER!,
+  "",
+  {
+    host: process.env.DB_HOST!,
+    port: Number(process.env.DB_PORT!),
+    dialect: "postgres",
+  }
+);
 
 sequelize
   .authenticate()
