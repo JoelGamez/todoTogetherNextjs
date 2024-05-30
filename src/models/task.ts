@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
+import User from "./user";
 
 class Task extends Model {
   public id!: number;
@@ -7,6 +8,7 @@ class Task extends Model {
   public points!: number;
   public priority!: string;
   public completed!: boolean;
+  public userId!: number; // This is the foreign key to the User model
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -35,11 +37,14 @@ Task.init(
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
+    userId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
+    },
   },
   {
     tableName: "tasks",
     sequelize, // passing the `sequelize` instance is required
   }
 );
-
 export default Task;

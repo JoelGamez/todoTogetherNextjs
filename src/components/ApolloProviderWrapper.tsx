@@ -1,13 +1,13 @@
-// src/components/ApolloProviderWrapper.tsx
-import dynamic from 'next/dynamic';
-import { ReactNode } from 'react';
+// // src/components/ApolloProviderWrapper.tsx
+// import dynamic from "next/dynamic";
+// import { ReactNode } from "react";
 
-const ApolloProviderClient = dynamic(() => import('./ApolloProviderClient'), {
-  ssr: false,
-});
+// const ApolloProviderClient = dynamic(() => import("./ApolloProviderClient"), {
+//   ssr: false,
+// });
 
-const ApolloProviderWrapper = ({ children }: { children: ReactNode }) => {
-  return <ApolloProviderClient>{children}</ApolloProviderClient>;
-};
+// const ApolloProviderWrapper = ({ children }: { children: ReactNode }) => {
+//   return <ApolloProviderClient>{children}</ApolloProviderClient>;
+// };
 
-export default ApolloProviderWrapper;
+// export default ApolloProviderWrapper;

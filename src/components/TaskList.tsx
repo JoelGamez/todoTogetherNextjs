@@ -1,7 +1,7 @@
 // src/components/TaskList.tsx
 import { useQuery, useMutation } from "@apollo/client";
 import { useState } from "react";
-import { GET_TASKS, DELETE_TASK, UPDATE_TASK } from "../graphql/queries";
+import { GET_TASKS, DELETE_TASK, UPDATE_TASK } from "../graphql/taskQueries";
 import { getUpdateTaskVariables } from "../utils/taskUtils";
 import TaskForm from "./TaskForm";
 

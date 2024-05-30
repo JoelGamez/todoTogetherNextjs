@@ -1,6 +1,7 @@
 // src/graphql/queries.ts
 import { gql } from "@apollo/client";
 
+// Task related queries and mutations...
 export const GET_TASKS = gql`
   query GetTasks {
     tasks {
