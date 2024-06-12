@@ -66,19 +66,8 @@ const TaskList: React.FC = () => {
               Mark as incomplete
             </button>
             <button onClick={() => deleteTask({ variables: { id: task.id } })}>
-              x
+              -x-
             </button>
-            {/* <button
-              onClick={() =>
-                deleteTask({
-                  variables: getUpdateTaskVariables(task, {
-                    priority: "LOW",
-                  }),
-                })
-              }
-            > */}
-            {/* DELETE
-            </button> */}
           </li>
         ))}
       </ul>
