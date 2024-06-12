@@ -5,7 +5,7 @@ const taskResolvers = {
     tasks: async (_: any, args: any, context: any) => {
       try {
         return await Task.findAll({
-          where: { userId: context.userId },
+          where: { userId: context.userId, deletedAt: null },
           order: [["createdAt", "ASC"]],
         });
       } catch (error) {
@@ -75,7 +75,8 @@ const taskResolvers = {
         if (!task) {
           throw new Error("Task not found");
         }
-        await task.destroy();
+        task.deletedAt = new Date();
+        await task.save();
         return task;
       } catch (error) {
         console.error("Error deleting task:", error);

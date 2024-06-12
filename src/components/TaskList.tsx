@@ -68,6 +68,17 @@ const TaskList: React.FC = () => {
             <button onClick={() => deleteTask({ variables: { id: task.id } })}>
               x
             </button>
+            {/* <button
+              onClick={() =>
+                deleteTask({
+                  variables: getUpdateTaskVariables(task, {
+                    priority: "LOW",
+                  }),
+                })
+              }
+            > */}
+            {/* DELETE
+            </button> */}
           </li>
         ))}
       </ul>

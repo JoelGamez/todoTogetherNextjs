@@ -8,6 +8,7 @@ class Task extends Model {
   public points!: number;
   public priority!: string;
   public completed!: boolean;
+  public deletedAt!: Date;
   public userId!: number; // This is the foreign key to the User model
 
   public readonly createdAt!: Date;
@@ -40,6 +41,10 @@ Task.init(
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {
