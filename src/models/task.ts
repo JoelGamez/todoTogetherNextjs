@@ -44,7 +44,8 @@ Task.init(
   },
   {
     tableName: "tasks",
-    sequelize, // passing the `sequelize` instance is required
+    sequelize, // passing the `sequelize` instance is required,
+    timestamps: true,
   }
 );
 export default Task;

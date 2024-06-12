@@ -94,6 +94,7 @@ const jwtMiddleware = async (
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET!) as any;
     req.user = user;
+    console.log("User:", user);
     next();
   } catch (err) {
     console.error(err);
@@ -122,6 +123,11 @@ const httpServer = http.createServer(app);
 const server = new ApolloServer({
   schema,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  context: ({ req }) => {
+    return {
+      userId: req.user?.id,
+    };
+  },
 });
 
 // Start the server before applying middleware

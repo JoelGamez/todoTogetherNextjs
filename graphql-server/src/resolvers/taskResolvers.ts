@@ -2,9 +2,10 @@ import Task from "../../../src/models/task";
 
 const taskResolvers = {
   Query: {
-    tasks: async () => {
+    tasks: async (_: any, args: any, context: any) => {
       try {
         return await Task.findAll({
+          where: { userId: context.userId },
           order: [["createdAt", "ASC"]],
         });
       } catch (error) {
@@ -20,10 +21,17 @@ const taskResolvers = {
         title,
         points,
         priority,
-      }: { title: string; points: number; priority: "LOW" | "MEDIUM" | "HIGH" }
+      }: { title: string; points: number; priority: "LOW" | "MEDIUM" | "HIGH" },
+      context: { userId: number }
     ) => {
       try {
-        return await Task.create({ title, points, priority, completed: false });
+        return await Task.create({
+          title,
+          points,
+          priority,
+          completed: false,
+          userId: context.userId,
+        });
       } catch (error) {
         console.error("Error adding task:", error);
         throw new Error("Error adding task");
