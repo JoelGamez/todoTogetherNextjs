@@ -33,3 +33,9 @@ export const AUTHENTICATE_USER = gql`
     }
   }
 `;
+
+export const LOGOUT_USER = gql`
+  mutation LogoutUser($token: String!) {
+    logoutUser(token: $token)
+  }
+`;

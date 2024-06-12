@@ -10,6 +10,12 @@ class User extends Model {
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  static async findById(id: string) {
+    // Implement your logic to find a user by id.
+    // This is just a placeholder implementation.
+    return new User();
+  }
 }
 
 User.init(

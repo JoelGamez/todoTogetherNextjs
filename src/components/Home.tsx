@@ -4,6 +4,7 @@
 import TaskList from "./TaskList";
 import React from "react";
 import AuthWrapper from "./AuthWrapper"; // Import the AuthWrapper
+import LogoutButton from "./LogoutButton";
 
 const Home: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const Home: React.FC = () => {
       <AuthWrapper>
         <h1>test</h1>
         <TaskList />
+        <LogoutButton />
       </AuthWrapper>
     </>
   );
