@@ -7,7 +7,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <h1>TODO TOGETHER</h1>
+        <h1>HoneyDoo</h1>
         <ApolloProviderClient>{children}</ApolloProviderClient>
       </body>
     </html>

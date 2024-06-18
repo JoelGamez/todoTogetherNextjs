@@ -5,7 +5,7 @@ import { AUTHENTICATE_USER } from "../graphql/usersQueries";
 import Cookies from "js-cookie";
 
 const SignInForm: React.FC = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authenticateUser] = useMutation(AUTHENTICATE_USER);
   const { setToken } = useAuth(); // Use the useAuth hook to get the setToken function
@@ -13,8 +13,9 @@ const SignInForm: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const { data } = await authenticateUser({
-      variables: { username, password },
+      variables: { email, password },
     });
+    console.log(data);
     if (data && data.authenticateUser) {
       setToken(data.authenticateUser.token); // Call setToken with the received token
       Cookies.set("token", data.authenticateUser.token); // Save the token to the cookies
@@ -26,11 +27,11 @@ const SignInForm: React.FC = () => {
       <h1>RUH OH, YOUR NOT SIGNED IN</h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Username:
+          Email:
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </label>
         <label>
