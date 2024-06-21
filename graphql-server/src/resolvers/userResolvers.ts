@@ -132,12 +132,11 @@ const userResolvers = {
         try {
           await sgMail.send(msg);
           console.log("Password reset email sent successfully");
-          return true;
+          return { token };
         } catch (error) {
           console.error("Failed to send password reset email", error);
           return false;
         }
-        return true;
       } catch (error) {
         console.error("Error in requestPasswordReset resolver:", error);
         return false;

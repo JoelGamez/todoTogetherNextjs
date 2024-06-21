@@ -42,7 +42,9 @@ export const LOGOUT_USER = gql`
 
 export const REQUEST_PASSWORD_RESET = gql`
   mutation RequestPasswordReset($email: String!) {
-    requestPasswordReset(email: $email)
+    requestPasswordReset(email: $email) {
+      token
+    }
   }
 `;
 
