@@ -14,6 +14,7 @@ const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql", // replace with your server URI
 });
 
+console.log("apollo is used here");
 // Create a middleware for the headers:
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists

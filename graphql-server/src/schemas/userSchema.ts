@@ -11,7 +11,6 @@ const userTypeDefs = `
     user: User!
   }
 
-
   type Query {
     users: [User]
   }
@@ -20,6 +19,8 @@ const userTypeDefs = `
     addUser(username: String!, email: String!, password: String!): User
     authenticateUser(email: String!, password: String!): AuthPayload!
     logoutUser(token: String!): String
+    requestPasswordReset(email: String!): String
+    resetPassword(token: String!, password: String!): String
   }
 `;
 

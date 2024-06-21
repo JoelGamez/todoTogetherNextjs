@@ -34,30 +34,39 @@ const checkBlacklist = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const token = req.headers.authorization?.split("Bearer ")[1];
-  console.log(`Checking token: ${token}`);
+  const isSandboxMode =
+    req.headers["x-sandbox-mode"] === "true" ||
+    process.env.SANDBOX_MODE === "true";
 
-  if (token) {
-    try {
-      const isBlacklisted = await redisClient.get(token);
-      console.log(`Token ${token} is blacklisted: ${isBlacklisted}`);
-      if (isBlacklisted) {
-        res.status(401).json({ error: "This token has been blacklisted." });
-        return;
-      }
-    } catch (err) {
-      if (err instanceof ClientClosedError) {
-        console.error("Redis client closed, attempting to reconnect...");
-        await redisClient.connect();
-        return checkBlacklist(req, res, next); // Retry the checkBlacklist function after reconnecting
-      } else {
-        console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
+  if (isSandboxMode) {
+    // Skip JWT authentication
+    next();
+  } else {
+    const token = req.headers.authorization?.split("Bearer ")[1];
+    console.log(`Checking token: ${token}`);
+
+    if (token) {
+      try {
+        const isBlacklisted = await redisClient.get(token);
+        console.log(`Token ${token} is blacklisted: ${isBlacklisted}`);
+        if (isBlacklisted) {
+          res.status(401).json({ error: "This token has been blacklisted." });
+          return;
+        }
+      } catch (err) {
+        if (err instanceof ClientClosedError) {
+          console.error("Redis client closed, attempting to reconnect...");
+          await redisClient.connect();
+          return checkBlacklist(req, res, next); // Retry the checkBlacklist function after reconnecting
+        } else {
+          console.error(err);
+          res.status(500).json({ error: "Internal Server Error" });
+          return;
+        }
       }
     }
+    next();
   }
-  next();
 };
 
 // Function to extract the operation name from the GraphQL query string
@@ -73,32 +82,42 @@ const jwtMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const noAuthOperations = ["AuthenticateUser", "AddUser"];
-  let operationName = req.body.operationName;
-  console.log(operationName, "operationName ---------------");
+  const isSandboxMode =
+    req.headers["x-sandbox-mode"] === "true" ||
+    process.env.SANDBOX_MODE === "true";
 
-  if (!operationName && req.body.query) {
-    operationName = extractOperationName(req.body.query);
-    console.log(operationName, "operationName ---------------");
-  }
-
-  if (operationName && noAuthOperations.includes(operationName)) {
-    return next();
-  }
-
-  const token = req.headers.authorization?.split("Bearer ")[1] || "";
-  if (!token) {
-    return res.status(401).json({ error: "Unauthorized: No token provided" });
-  }
-
-  try {
-    const user = jwt.verify(token, process.env.JWT_SECRET!) as any;
-    req.user = user;
-    console.log("User:", user);
+  if (isSandboxMode) {
+    // Skip JWT authentication
     next();
-  } catch (err) {
-    console.error(err);
-    return res.status(401).json({ error: "Unauthorized: Invalid token" });
+  } else {
+    const noAuthOperations = [
+      "AuthenticateUser",
+      "AddUser",
+      "ResetPassword",
+      "RequestPasswordReset",
+    ];
+    let operationName = req.body.operationName;
+    console.log(operationName, "operationName ---------------");
+    if (!operationName && req.body.query) {
+      operationName = extractOperationName(req.body.query);
+      console.log(operationName, "operationName ---------------");
+    }
+    if (operationName && noAuthOperations.includes(operationName)) {
+      return next();
+    }
+    const token = req.headers.authorization?.split("Bearer ")[1] || "";
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized: No token provided" });
+    }
+    try {
+      const user = jwt.verify(token, process.env.JWT_SECRET!) as any;
+      req.user = user;
+      console.log("User:", user);
+      next();
+    } catch (err) {
+      console.error(err);
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    }
   }
 };
 
@@ -115,6 +134,7 @@ app.use(cors()); // Enable all CORS requests
 app.use(express.json());
 
 // Use the blacklist check and JWT verification middlewares
+
 app.use(checkBlacklist);
 app.use(jwtMiddleware);
 
