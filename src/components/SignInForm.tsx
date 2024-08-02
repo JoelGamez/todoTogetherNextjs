@@ -5,6 +5,7 @@ import { AUTHENTICATE_USER } from "../graphql/usersQueries";
 import SignupForm from "./SignUpForm";
 import PasswordResetRequestForm from "./PasswordResetRequestForm"; // Import the PasswordResetRequestForm
 import Cookies from "js-cookie";
+import { Box } from "@mui/material";
 
 const SignInForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -44,32 +45,117 @@ const SignInForm: React.FC = () => {
   }
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email:
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
+    >
+      <Box
+        style={{
+          width: "100%",
+          maxWidth: "400px", // Limit the width for mobile view
+          textAlign: "center", // Center the text inside this Box
+        }}
+      >
+        <img
+          src="/images/honeyDooLogoV1.png"
+          alt="Logo"
+          style={{
+            display: "block",
+            margin: "0 0 -60px",
+            width: "100%", // Make the image responsive
+            maxWidth: "800px", // Adjust the width as needed
+            height: "auto",
+          }}
+        />
+        <h1>HoneyDoo</h1>
+        <form onSubmit={handleSubmit}>
+          {/* <label>
+            Email: */}
           <input
+            id="email"
             type="text"
             value={email}
+            placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
+            style={{
+              borderRadius: "44px",
+              padding: "8px",
+              width: "100%",
+              border: "none",
+              color: "black",
+              marginBottom: "16px",
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)",
+            }}
           />
-        </label>
-        <label>
-          Password:
+          {/* </label> */}
+          {/* <label>
+            Password: */}
           <input
+            id="password"
             type="password"
             value={password}
+            placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
+            style={{
+              borderRadius: "44px",
+              padding: "8px",
+              width: "100%",
+              border: "none",
+              color: "black",
+              marginBottom: "16px",
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)",
+            }}
           />
-        </label>
-        <input type="submit" value="Sign In" />
-      </form>
-      <button onClick={() => setShowSignup(true)}>Sign Up</button>
-      <br />
-      <button onClick={() => setShowPasswordReset(true)}>
-        --Forgot Password?--
-      </button>
-    </>
+          {/* </label> */}
+          <input
+            id="siginIn"
+            type="submit"
+            value="Sign In"
+            style={{
+              borderRadius: "44px",
+              padding: "8px",
+              width: "100%",
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)",
+              border: "none",
+              color: "black",
+              marginBottom: "16px",
+              backgroundColor: "#d69f0b",
+            }}
+          />
+        </form>
+        <button
+          onClick={() => setShowSignup(true)}
+          style={{
+            borderRadius: "44px",
+            padding: "8px",
+            width: "100%",
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)",
+            border: "none",
+            color: "black",
+            marginBottom: "16px",
+            backgroundColor: "#d69f0b",
+          }}
+        >
+          Sign Up
+        </button>
+        <br />
+        <button
+          onClick={() => setShowPasswordReset(true)}
+          style={{
+            borderRadius: "44px",
+            padding: "8px",
+            border: "none",
+            color: "black",
+            marginBottom: "16px",
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          Forgot Password?
+        </button>
+      </Box>
+    </Box>
   );
 };
 
