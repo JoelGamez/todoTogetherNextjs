@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client";
 import { useAuth } from "./AuthWrapper"; // Import the useAuth hook
 import { AUTHENTICATE_USER } from "../graphql/usersQueries";
 import SignupForm from "./SignUpForm";
+import Logo from "./Logo";
 import PasswordResetRequestForm from "./PasswordResetRequestForm"; // Import the PasswordResetRequestForm
 import Cookies from "js-cookie";
 import { Box } from "@mui/material";
@@ -58,17 +59,7 @@ const SignInForm: React.FC = () => {
           textAlign: "center", // Center the text inside this Box
         }}
       >
-        <img
-          src="/images/honeyDooLogoV1.png"
-          alt="Logo"
-          style={{
-            display: "block",
-            margin: "0 0 -60px",
-            width: "100%", // Make the image responsive
-            maxWidth: "800px", // Adjust the width as needed
-            height: "auto",
-          }}
-        />
+        <Logo />
         <h1>HoneyDoo</h1>
         <form onSubmit={handleSubmit}>
           {/* <label>
@@ -140,7 +131,6 @@ const SignInForm: React.FC = () => {
         >
           Sign Up
         </button>
-        <br />
         <button
           onClick={() => setShowPasswordReset(true)}
           style={{

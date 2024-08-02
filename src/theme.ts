@@ -12,11 +12,11 @@ const theme = createTheme({
   typography: {
     fontFamily: "'Arial', sans-serif",
   },
-  palette: {
-    background: {
-      default: "#d9c771", // Yellow background
-    },
-  },
+  // palette: {
+  //   background: {
+  //     default: "#d9c771", // Yellow background
+  //   },
+  // },
 });
 
 export default theme;

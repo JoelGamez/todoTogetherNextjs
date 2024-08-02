@@ -23,7 +23,8 @@ const ClientThemeWrapper: React.FC<{ children: React.ReactNode }> = ({
               fontFamily: theme.typography.fontFamily,
             },
             body: {
-              backgroundColor: theme.palette.background.default,
+              background:
+                "linear-gradient(0deg, rgba(255,255,113,1) 0%, rgba(217,199,113,1) 100%)",
             },
             // Add more global styles as needed
           }}
